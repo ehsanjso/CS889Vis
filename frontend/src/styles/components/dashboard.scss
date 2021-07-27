@@ -1,0 +1,103 @@
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 60px;
+    color: #393e46;
+  }
+}
+
+.dashboard-inner {
+  width: 800px;
+
+  .answers {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    img {
+      width: 150px;
+      height: 210px;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      cursor: pointer;
+      transition: 0.2s all ease;
+
+      &:hover {
+        margin-top: -20px;
+        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+      }
+    }
+  }
+}
+
+.heading {
+  font-size: 15px !important;
+  letter-spacing: 1px;
+  margin: 0;
+  line-height: 24px;
+  width: 200px;
+  margin: 0 0;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+
+  &::first-letter {
+    color: #fe5f55;
+    font-size: 50px;
+    float: left;
+    line-height: 40px;
+    padding-right: 3px;
+    margin-top: 5px;
+  }
+
+  &:hover {
+    box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+  }
+}
+
+.player-wrapper {
+  position: relative;
+  // padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+  width: 160px;
+  margin: 0 20px;
+  background: black;
+  border-radius: 10px;
+  height: 160px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.w-cloud {
+  font-size: 15px !important;
+  letter-spacing: 1px;
+  margin: 0;
+  line-height: 24px;
+  width: 200px;
+  margin: 0 0;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.ant-progress-line {
+  position: absolute !important;
+  bottom: 0;
+
+  .ant-progress-inner {
+    border-radius: 0 !important;
+    height: 20px;
+
+    .ant-progress-success-bg,
+    .ant-progress-bg {
+      border-radius: 0 !important;
+      height: 20px !important;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.spiral {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-to-main {
+  width: 150px;
+  left: 20px;
+  top: 20px;
+  position: absolute;
+  cursor: pointer;
+}
