@@ -1,0 +1,25 @@
+.timeline {
+  height: 100px;
+  width: 100%;
+  position: relative;
+}
+
+.play-btn {
+  position: absolute;
+  left: 20px;
+  top: 30px;
+  z-index: 2;
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  color: #8785a2;
+  transition: 0.2s all ease;
+
+  &:hover {
+    color: #ffc7c7;
+  }
+}
+
+.date-bins {
+  cursor: pointer;
+}
