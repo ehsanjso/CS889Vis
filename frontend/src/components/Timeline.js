@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { ResizeObserver } from "@juggle/resize-observer";
+import moment from "moment";
 import * as d3 from "d3";
 import * as R from "ramda";
 import { CaretRightOutlined } from "@ant-design/icons";
@@ -69,13 +70,53 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
         .on("mouseout", mouseOut)
         .on("click", mouseClick);
 
+      const text = bounds
+        .selectAll(".date-text")
+        .data(dateRange)
+        .enter()
+        .append("text")
+        .attr("class", "date-text")
+        .attr("x", (d, i) => scaleX(i) - interval / 2)
+        .attr("y", 50)
+        .text((d) => {
+          const startOfMonth = moment(d).startOf("month").format("YYYY-MM-DD");
+
+          return d === startOfMonth ? moment(d).format("MMM YY") : "";
+        })
+        .attr("text-anchor", "middle")
+        .attr("fill", "#393E46");
+
+      const dateTicks = bounds
+        .selectAll(".date-tick")
+        .data(dateRange)
+        .enter()
+        .append("line")
+        .attr("class", "date-line")
+        .attr("x1", (d, i) => scaleX(i))
+        .attr("x2", (d, i) => scaleX(i))
+        .attr("y1", 25)
+        .attr("y2", 35)
+        .attr("stroke", (d) => {
+          const startOfMonth = moment(d).startOf("month").format("YYYY-MM-DD");
+          return d === startOfMonth ? "#F38181" : "transparent";
+        })
+        .attr("stroke-width", 2);
+
       function mouseOver(event, d) {
         event.stopPropagation();
         lines
           .transition()
           .duration(100)
-          .attr("y1", (datum) => (d === datum ? -20 : 0))
-          .attr("stroke", (datum) => (d === datum ? "#95E1D3" : "#8785A2"));
+          .attr("y1", (datum) =>
+            d === datum || datum === activeTime ? -20 : 0
+          )
+          .attr("stroke", (datum) =>
+            d === datum
+              ? "#95E1D3"
+              : datum === activeTime
+              ? "#F38181"
+              : "#8785A2"
+          );
       }
 
       function mouseOut(event, d) {
