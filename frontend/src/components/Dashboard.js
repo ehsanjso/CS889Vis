@@ -4,6 +4,7 @@ import { ResizeObserver } from "@juggle/resize-observer";
 import { host } from "../actions/consts/host";
 import * as d3 from "d3";
 import * as R from "ramda";
+import { history } from "../routers/AppRouter";
 import Logo from "./Logo";
 import Timeline from "./Timeline";
 import "../styles/components/dashboard.scss";
@@ -50,9 +51,10 @@ export default function Dashboard() {
         (el) => !nunNumericProperties.includes(el),
         R.keys(dataset[0])
       );
-      const matrixData = R.map(
-        (el) => R.props(metrics, el[0]),
-        R.values(groupedByProtocol)
+      const matrixData = R.values(groupedByProtocol).map((el, i) =>
+        R.zip(metrics, R.props(metrics, el[0])).map((el) =>
+          R.concat([protocols[i]], el)
+        )
       );
 
       const metricsExtent = [];
@@ -101,11 +103,13 @@ export default function Dashboard() {
         .data((v) => v)
         .enter()
         .append("circle")
+        .attr("class", "dots")
         .attr("cx", (d, j) => j * cellsMargined)
         .attr("cy", 0)
-        .attr("r", (d, i) => scale(metricsExtent[i])(d))
+        .attr("r", (d, i) => scale(metricsExtent[i])(d[2]))
         .attr("fill", (d, i) => colorScale(i))
-        .attr("transform", translate(cellSize / 2 + 30, cellSize / 2));
+        .attr("transform", translate(cellSize / 2 + 30, cellSize / 2))
+        .on("click", mouseClick);
 
       // drawLabel
       for (let i = 0; i < metrics.length; i++) {
@@ -183,6 +187,12 @@ export default function Dashboard() {
       // utils
       function translate(x, y) {
         return "translate(" + x + "," + y + ")";
+      }
+
+      function mouseClick(event, d) {
+        event.stopPropagation();
+        console.log(d);
+        history.push(`/spiral/${d[0]}/${d[1]}`);
       }
     }
     return () => {

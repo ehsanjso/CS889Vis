@@ -197,7 +197,7 @@ export default class TimeSpiral {
       .scaleLinear()
       .domain([this._min, this._max])
       .nice()
-      .range([5, this._layerHeight]);
+      .range([1, this._layerHeight]);
   }
 
   _initColors() {

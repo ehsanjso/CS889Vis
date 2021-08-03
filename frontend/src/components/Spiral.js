@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { ResizeObserver } from "@juggle/resize-observer";
+import { host } from "../actions/consts/host";
 import * as d3 from "d3";
+import * as R from "ramda";
+import moment from "moment";
 import DATA from "../assets/data.json";
 import Logo from "./Logo";
 import TimeSpiral from "./TimeSpiral";
@@ -15,17 +19,53 @@ const chartSettings = {
   marginLeft: 20,
 };
 
-export default function Spiral() {
+export default function Spiral({ match }) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
+  const [data, setData] = useState(undefined);
+
+  const protocol =
+    match.params.protocol === "Nexus_Mutual" ? "nexus" : match.params.protocol;
+  const metric = match.params.metric;
 
   useEffect(() => {
-    if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0) {
+    const fetchData = async () => {
+      const result = await axios(`${host}/metric/${protocol}`);
+      setData(result.data);
+    };
+
+    fetchData();
+  }, [protocol]);
+
+  useEffect(() => {
+    if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0 && data) {
       // 1. Access data
-      let dataset = [];
+      let dataset = R.map(
+        (el) => ({
+          date: new Date(el.Date),
+          metric: el[metric],
+        }),
+        data
+      );
+
+      const extent = d3.extent(R.map((el) => parseFloat(el.metric), dataset));
+
+      const scale = d3.scaleLinear().domain(extent).range([0, 100]);
+
+      const scaledData = R.map(
+        (el) => ({
+          ...el,
+          metric: scale(el.metric),
+        }),
+        dataset
+      );
+
+      const groupedData = R.groupBy(
+        (el) => moment(el.date).format("YYYY-MM-DD"),
+        scaledData
+      );
 
       // 3. Draw canvas
-      const svg = d3.select(refSvg.current);
       const wrapper = d3.select(refSvg.current);
 
       const bounds = wrapper
@@ -36,10 +76,24 @@ export default function Spiral() {
           `translate(${dms.marginLeft}px, ${dms.marginTop}px)`
         );
 
-      const data = DATA["sanfrancisco"].map((d) => ({
-        date: new Date(d["Date time"]),
-        temp: +d["Temperature"],
-      }));
+      var firstDayOfYear = moment(scaledData[0].date).startOf("year");
+      var lastDayOfYear = moment(scaledData[scaledData.length - 1].date).endOf(
+        "year"
+      );
+
+      const numberOfDaysInYear = lastDayOfYear.diff(firstDayOfYear, "days") + 1;
+
+      const finalData = [];
+
+      for (let i = 0; i < numberOfDaysInYear; i++) {
+        const d = groupedData[moment(firstDayOfYear).format("YYYY-MM-DD")];
+
+        finalData.push({
+          date: new Date(firstDayOfYear),
+          metric: d ? d[0].metric : 0,
+        });
+        firstDayOfYear = firstDayOfYear.add(1, "days");
+      }
 
       const chart = new TimeSpiral(bounds)
         .size([dms.boundedWidth, dms.boundedHeight])
@@ -49,23 +103,22 @@ export default function Spiral() {
           reverseColor: true, // reverse d3.interpolateRdYlBu
         })
         .palette(d3.interpolateRdYlBu)
-        .field({ value: "temp" })
-        .data(data)
+        .field({ value: "metric" })
+        .data(finalData)
         .render();
-
-      // 4. Create scales
-
-      // 5. Draw data
-
-      // 6. Draw peripherals
-
-      // // 7. Draw Scene Breaks
     }
     return () => {
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };
-  }, [dms.boundedHeight, dms.boundedWidth, dms.marginLeft, dms.marginTop]);
+  }, [
+    dms.boundedHeight,
+    dms.boundedWidth,
+    dms.marginLeft,
+    dms.marginTop,
+    data,
+    metric,
+  ]);
 
   return (
     <div className="spiral" ref={ref}>

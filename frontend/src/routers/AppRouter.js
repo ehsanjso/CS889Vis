@@ -15,7 +15,11 @@ const AppRouter = (props) => {
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/spiral" exact={true} component={Spiral} />
+        <Route
+          path="/spiral/:protocol/:metric"
+          exact={true}
+          component={Spiral}
+        />
         <Route path="/" component={Dashboard} exact={true} />
         <Route path="/search" component={Search} exact={true} />
         <Route path="/portfolio" component={Portfolio} exact={true} />

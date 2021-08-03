@@ -20,6 +20,7 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
   useEffect(() => {
     if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0 && data) {
       // 1. Access data
+
       let dataset = [...data];
       const dateRange = R.uniq(R.map(R.prop("Date"), dataset));
 

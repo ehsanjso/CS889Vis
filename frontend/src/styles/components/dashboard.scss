@@ -102,3 +102,10 @@
     }
   }
 }
+
+.dots {
+  cursor: pointer;
+  &:hover {
+    stroke: blue;
+  }
+}
