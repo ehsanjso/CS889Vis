@@ -6,11 +6,11 @@ import { host } from "../actions/consts/host";
 import * as d3 from "d3";
 import * as R from "ramda";
 import moment from "moment";
-import DATA from "../assets/data.json";
 import Logo from "./Logo";
 import TimeSpiral from "./TimeSpiral";
 import Loading from "./Loading";
-import MAIN from "../assets/img/main.png";
+import Header from "./Header";
+import InfoBox from "./InfoBox";
 import "../styles/components/spiral.scss";
 
 const chartSettings = {
@@ -126,11 +126,13 @@ export default function Spiral({ match }) {
 
   return (
     <div className="spiral" ref={ref}>
+      <Header />
       <div className="tooltip"></div>
       <Logo />
-      <Link to="/">
-        <img src={MAIN} alt="main" className="back-to-main" />
-      </Link>
+      <InfoBox
+        time={`Protocol: ${protocol} | Metric: ${metric}`}
+        icon={false}
+      />
       <svg width={dms.width} height={dms.height} ref={refSvg}></svg>
       {fetchInProg && <Loading />}
     </div>
