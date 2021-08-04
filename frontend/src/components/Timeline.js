@@ -7,7 +7,7 @@ import { CaretRightOutlined, PauseOutlined } from "@ant-design/icons";
 import "../styles/components/timeline.scss";
 
 const chartSettings = {
-  marginTop: 30,
+  marginTop: 40,
   marginRight: 30,
   marginBottom: 0,
   marginLeft: 50,
@@ -19,6 +19,7 @@ export default function Timeline({
   setActiveTime,
   setIsPlaying,
   isPlaying,
+  dateIndex,
 }) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
@@ -90,7 +91,7 @@ export default function Timeline({
         .text((d) => {
           const startOfMonth = moment(d).startOf("month").format("YYYY-MM-DD");
 
-          return d === startOfMonth ? moment(d).format("MMM YY") : "";
+          return d === startOfMonth ? moment(d).format("MMM YYYY") : "";
         })
         .attr("text-anchor", "middle")
         .attr("fill", "#393E46");
@@ -110,6 +111,20 @@ export default function Timeline({
           return d === startOfMonth ? "#F38181" : "transparent";
         })
         .attr("stroke-width", 2);
+
+      const activeDate = bounds
+        .selectAll(".date-active")
+        .data([activeTime])
+        .enter()
+        .append("text")
+        .attr("class", "date-active")
+        .attr("x", (d, i) => scaleX(dateIndex) - interval / 2)
+        .attr("y", -30)
+        .text((d) => {
+          return moment(d).format("MMM DD, YYYY");
+        })
+        .attr("text-anchor", "middle")
+        .attr("fill", "#393E46");
 
       // create a tooltip
       var Tooltip = d3.select(".tooltip").style("opacity", 0);

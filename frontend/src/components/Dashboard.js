@@ -277,6 +277,7 @@ export default function Dashboard() {
           setActiveTime={setActiveTime}
           setIsPlaying={setIsPlaying}
           isPlaying={isPlaying}
+          dateIndex={dateIndex}
         />
       )}
       {fetchInProg && <Loading />}
