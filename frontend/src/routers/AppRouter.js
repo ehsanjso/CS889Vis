@@ -22,7 +22,7 @@ const AppRouter = (props) => {
         />
         <Route path="/" component={Dashboard} exact={true} />
         <Route path="/search" component={Search} exact={true} />
-        <Route path="/portfolio" component={Portfolio} exact={true} />
+        <Route path="/portfolio/:address" component={Portfolio} exact={true} />
       </Switch>
     </Router>
   );

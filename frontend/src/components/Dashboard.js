@@ -191,7 +191,6 @@ export default function Dashboard() {
 
       function mouseClick(event, d) {
         event.stopPropagation();
-        console.log(d);
         history.push(`/spiral/${d[0]}/${d[1]}`);
       }
     }
