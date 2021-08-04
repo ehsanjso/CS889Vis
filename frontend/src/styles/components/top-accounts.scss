@@ -1,0 +1,23 @@
+.top-accounts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transition-delay: 0.5s;
+  transition: 0.4s all ease;
+  z-index: 1;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  overflow: hidden;
+  border-radius: 10px;
+  position: absolute;
+
+  .ant-table-wrapper {
+    width: 100%;
+  }
+
+  &.visible {
+    opacity: 1;
+    display: flex;
+  }
+}

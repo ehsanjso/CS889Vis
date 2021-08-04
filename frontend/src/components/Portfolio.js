@@ -4,6 +4,7 @@ import { host } from "../actions/consts/host";
 import * as d3 from "d3";
 import * as R from "ramda";
 import { history } from "../routers/AppRouter";
+import Loading from "./Loading";
 import "../styles/components/portfolio.scss";
 
 const chartSettings = {
@@ -13,12 +14,28 @@ const chartSettings = {
   marginLeft: 50,
 };
 
-export default function Portfolio({ data, address }) {
+export default function Portfolio({ address }) {
   const [ref, dms] = useChartDimensions(chartSettings);
+  const [data, setData] = useState();
+  const [fetchInProg, setFetchInProg] = useState(false);
   const refSvg = useRef();
 
-  console.log(data);
   const f = d3.format("+,d");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setFetchInProg(true);
+      const body = {
+        address: address,
+      };
+      const result = await axios.post(`${host}/activity/address`, body);
+      setData(result.data);
+      setFetchInProg(false);
+    };
+    if (address) {
+      fetchData();
+    }
+  }, [address]);
 
   useEffect(() => {
     if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0 && data) {
@@ -164,6 +181,7 @@ export default function Portfolio({ data, address }) {
           <svg width={dms.width} height={dms.height} ref={refSvg}></svg>
         </div>
       </div>
+      {fetchInProg && <Loading />}
     </div>
   );
 }

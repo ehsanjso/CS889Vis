@@ -6,11 +6,12 @@ import { history } from "../routers/AppRouter";
 import Logo from "./Logo";
 import "../styles/components/search.scss";
 import Portfolio from "./Portfolio";
+import TopAccounts from "./TopAccounts";
 
-export default function Search() {
+export default function Search({ match }) {
+  const topAccount = match.params.address === "top-accounts";
   const [address, setAddress] = useState(undefined);
-  const [portfolioAddress, setPortfolioAddress] = useState(undefined);
-  const [data, setData] = useState();
+  const portfolioAddress = topAccount ? undefined : match.params.address;
 
   const onSearch = async () => {
     const body = {
@@ -18,9 +19,8 @@ export default function Search() {
     };
     try {
       const result = await axios.post(`${host}/activity/address`, body);
-      setData(result.data);
       setAddress(undefined);
-      setPortfolioAddress(address);
+      history.push(`/search/${address}`);
     } catch (error) {
       message.error("Address is not valid!");
     }
@@ -29,20 +29,30 @@ export default function Search() {
   const onChange = (event) => {
     const val = event.target.value;
     setAddress(val);
+    history.push(`/search`);
+  };
+
+  const onTop = () => {
+    history.push(`/search/top-accounts`);
   };
 
   return (
     <div className="search">
-      <Portfolio data={data} address={portfolioAddress} />
+      <Portfolio address={portfolioAddress} />
+      <TopAccounts show={topAccount} />
 
-      <div className={`search-box ${data ? "has-data" : ""}`}>
+      <div
+        className={`search-box ${
+          portfolioAddress || topAccount ? "has-data" : ""
+        }`}
+      >
         <Logo />
         <Input size="large" value={address} onChange={onChange} />
         <div className="search-btns">
           <Button type="primary" onClick={onSearch}>
             Search
           </Button>
-          <Button>Top Accounts</Button>
+          <Button onClick={onTop}>Top Accounts</Button>
         </div>
       </div>
     </div>
