@@ -8,6 +8,10 @@ import { history } from "../routers/AppRouter";
 import Logo from "./Logo";
 import Timeline from "./Timeline";
 import "../styles/components/dashboard.scss";
+import InfoBox from "./InfoBox";
+import Header from "./Header";
+import Loading from "./Loading";
+import { active } from "d3";
 
 const chartSettings = {
   marginTop: 250,
@@ -23,11 +27,47 @@ export default function Dashboard() {
   const refSvg = useRef();
   const [activeTime, setActiveTime] = useState(undefined);
   const [data, setData] = useState(undefined);
+  const [fetchInProg, setFetchInProg] = useState(false);
+  const didMountRef = useRef(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const dateRange = data ? R.uniq(R.map(R.prop("Date"), data)) : undefined;
+
+  let request = null;
+  let start = undefined;
+  let dateIndex = dateRange
+    ? R.findIndex((el) => el === activeTime, dateRange)
+    : 0;
+  const performAnimation = (timestamp) => {
+    request = requestAnimationFrame(performAnimation);
+    if (start === undefined) start = timestamp;
+    const elapsed = timestamp - start;
+
+    if (elapsed > 500) {
+      start = undefined;
+      setActiveTime(dateRange[dateIndex++ % dateRange.length]);
+    }
+  };
+
+  useEffect(() => {
+    if (didMountRef.current) {
+      if (isPlaying) {
+        requestAnimationFrame(performAnimation);
+      } else {
+        cancelAnimationFrame(request);
+      }
+    } else {
+      didMountRef.current = true;
+    }
+    return () => cancelAnimationFrame(request);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setFetchInProg(true);
       const result = await axios(`${host}/metric/all`);
       setData(result.data);
+      setFetchInProg(false);
     };
 
     fetchData();
@@ -38,7 +78,6 @@ export default function Dashboard() {
       // 1. Access data
       let dataset = [...data];
       if (activeTime === undefined) {
-        const dateRange = R.uniq(R.map(R.prop("Date"), dataset));
         setActiveTime(dateRange[0]);
       }
       const groupedByDate = R.groupBy(R.prop("Date"), dataset);
@@ -109,7 +148,10 @@ export default function Dashboard() {
         .attr("r", (d, i) => scale(metricsExtent[i])(d[2]))
         .attr("fill", (d, i) => colorScale(i))
         .attr("transform", translate(cellSize / 2 + 30, cellSize / 2))
-        .on("click", mouseClick);
+        .on("click", mouseClick)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
 
       // drawLabel
       for (let i = 0; i < metrics.length; i++) {
@@ -193,6 +235,22 @@ export default function Dashboard() {
         event.stopPropagation();
         history.push(`/spiral/${d[0]}/${d[1]}`);
       }
+
+      // create a tooltip
+      var Tooltip = d3.select(".tooltip").style("opacity", 0);
+
+      // Three function that change the tooltip when user hover / move / leave a cell
+      function mouseover(event, d) {
+        Tooltip.style("opacity", 1).style("z-index", 3);
+      }
+      function mousemove(event, d) {
+        Tooltip.html(d[2])
+          .style("left", event.clientX + "px")
+          .style("top", event.clientY - cellsMargined / 1.5 + "px");
+      }
+      function mouseleave(d) {
+        Tooltip.style("opacity", 0).style("z-index", 1);
+      }
     }
     return () => {
       const svg = d3.select(refSvg.current);
@@ -208,6 +266,8 @@ export default function Dashboard() {
   ]);
   return (
     <div className="dashboard" ref={ref}>
+      <Header />
+      {activeTime && <InfoBox time={activeTime} />}
       <Logo />
       <svg width={dms.width} height={dms.height} ref={refSvg}></svg>
       {data && (
@@ -215,8 +275,12 @@ export default function Dashboard() {
           data={data}
           activeTime={activeTime}
           setActiveTime={setActiveTime}
+          setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
         />
       )}
+      {fetchInProg && <Loading />}
+      <div className="tooltip"></div>
     </div>
   );
 }

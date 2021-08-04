@@ -44,3 +44,13 @@ code {
 ::-webkit-scrollbar-corner {
   background-color: transparent;
 }
+
+.tooltip {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  position: absolute;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  transform: translate(-50%, 0);
+  // transition: 0.1s all ease;
+}

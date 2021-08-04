@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Space } from "antd";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/components/top-accounts.scss";
 
 const columns = [
@@ -52,60 +52,49 @@ const data = [
     name: "Alameda Research (SBF)– Famous investor",
     address: "0x477573f212A7bdD5F7C12889bd1ad0aA44fb82aa",
   },
-];
-
-const columns2 = [
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (text, record) => (
-      <Space size="middle">
-        <Link to={`/search/${record.address}`}>Show Account</Link>
-      </Space>
-    ),
-  },
-];
-
-const data2 = [
-  {
-    key: "1",
+    key: "6",
+    name: "Unknown",
     address: "0x57757e3d981446d585af0d9ae4d7df6d64647806",
   },
   {
-    key: "2",
+    key: "7",
+    name: "Unknown",
     address: "0x46499275b5c4d67dfa46b92d89aada3158ea392e",
   },
   {
-    key: "3",
+    key: "8",
+    name: "Unknown",
     address: "0x57ef012861c4937a76b5d6061be800199a2b9100",
   },
   {
-    key: "4",
+    key: "9",
+    name: "Unknown",
     address: "0x6cfac3cf77a359d7ce28c14f2d53de48981e0f04",
   },
   {
-    key: "5",
+    key: "10",
+    name: "Unknown",
     address: "0xf486d56cce70c481b3455af901fcc4f03fee8107",
   },
   {
-    key: "6",
+    key: "11",
+    name: "Unknown",
     address: "0xc31db2e710192791b65de43d4b84886a6d770322",
   },
   {
-    key: "7",
+    key: "12",
+    name: "Unknown",
     address: "0x554b1bd47b7d180844175ca4635880da8a3c70b9",
   },
   {
-    key: "8",
+    key: "13",
+    name: "Unknown",
     address: "0x951b6d50d07c39b0f97a7bb2f5c1e96f07a093d3",
   },
   {
-    key: "9",
+    key: "14",
+    name: "Unknown",
     address: "0x71f9ccd68bf1f5f9b571f509e0765a04ca4ffad2",
   },
 ];
@@ -114,7 +103,6 @@ export default function TopAccounts({ show }) {
   return (
     <div className={`top-accounts ${show ? "visible" : ""}`}>
       <Table columns={columns} dataSource={data} pagination={false} />
-      <Table columns={columns2} dataSource={data2} pagination={false} />
     </div>
   );
 }

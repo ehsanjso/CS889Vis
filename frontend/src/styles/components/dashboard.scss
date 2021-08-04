@@ -10,6 +10,10 @@
     margin-bottom: 60px;
     color: #393e46;
   }
+
+  svg {
+    z-index: 2;
+  }
 }
 
 .dashboard-inner {
@@ -105,7 +109,8 @@
 
 .dots {
   cursor: pointer;
+  // transition: 0.2s all ease;
   &:hover {
-    stroke: blue;
+    stroke: black;
   }
 }

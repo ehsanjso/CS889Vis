@@ -255,6 +255,9 @@ export default class TimeSpiral {
         return this._color(key);
       };
 
+    // create a tooltip
+    var Tooltip = d3.select(".tooltip").style("opacity", 0);
+
     const bars = this._g
       .selectAll(".bar")
       .data(this._bars)
@@ -272,10 +275,22 @@ export default class TimeSpiral {
           .transition()
           .duration(250)
           .attr("opacity", (_) => (_ === d ? 1 : 0.5));
+        Tooltip.style("opacity", 1).style("z-index", 3);
       })
       .on("mouseout", (e, d) => {
         bars.transition().duration(250).attr("opacity", 1);
-      });
+      })
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave);
+
+    function mousemove(event, d) {
+      Tooltip.html(d.value)
+        .style("left", event.clientX + "px")
+        .style("top", event.clientY - 70 + "px");
+    }
+    function mouseleave(d) {
+      Tooltip.style("opacity", 0).style("z-index", 1);
+    }
 
     if (this._style.rounded) bars.attr("rx", hw).attr("ry", hw);
 

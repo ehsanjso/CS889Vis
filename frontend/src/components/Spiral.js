@@ -9,6 +9,7 @@ import moment from "moment";
 import DATA from "../assets/data.json";
 import Logo from "./Logo";
 import TimeSpiral from "./TimeSpiral";
+import Loading from "./Loading";
 import MAIN from "../assets/img/main.png";
 import "../styles/components/spiral.scss";
 
@@ -23,6 +24,7 @@ export default function Spiral({ match }) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
   const [data, setData] = useState(undefined);
+  const [fetchInProg, setFetchInProg] = useState(false);
 
   const protocol =
     match.params.protocol === "Nexus_Mutual" ? "nexus" : match.params.protocol;
@@ -30,8 +32,10 @@ export default function Spiral({ match }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      setFetchInProg(true);
       const result = await axios(`${host}/metric/${protocol}`);
       setData(result.data);
+      setFetchInProg(false);
     };
 
     fetchData();
@@ -122,11 +126,13 @@ export default function Spiral({ match }) {
 
   return (
     <div className="spiral" ref={ref}>
+      <div className="tooltip"></div>
       <Logo />
       <Link to="/">
         <img src={MAIN} alt="main" className="back-to-main" />
       </Link>
       <svg width={dms.width} height={dms.height} ref={refSvg}></svg>
+      {fetchInProg && <Loading />}
     </div>
   );
 }

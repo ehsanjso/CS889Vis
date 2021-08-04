@@ -6,6 +6,7 @@ import { history } from "../routers/AppRouter";
 import Logo from "./Logo";
 import "../styles/components/search.scss";
 import Portfolio from "./Portfolio";
+import Header from "./Header";
 import TopAccounts from "./TopAccounts";
 
 export default function Search({ match }) {
@@ -38,6 +39,7 @@ export default function Search({ match }) {
 
   return (
     <div className="search">
+      <Header />
       <Portfolio address={portfolioAddress} />
       <TopAccounts show={topAccount} />
 

@@ -19,5 +19,6 @@
   &.visible {
     opacity: 1;
     display: flex;
+    z-index: 2;
   }
 }

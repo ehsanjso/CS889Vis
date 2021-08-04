@@ -3,6 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  svg {
+    z-index: 2;
+  }
 }
 
 .back-to-main {
@@ -11,4 +15,5 @@
   top: 20px;
   position: absolute;
   cursor: pointer;
+  z-index: 3;
 }

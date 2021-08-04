@@ -1,0 +1,13 @@
+.header {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 3;
+
+  a {
+    padding: 0 10px;
+    &:first-child {
+      border-right: 1px solid #8785a2;
+    }
+  }
+}

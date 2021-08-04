@@ -3,7 +3,7 @@ import { ResizeObserver } from "@juggle/resize-observer";
 import moment from "moment";
 import * as d3 from "d3";
 import * as R from "ramda";
-import { CaretRightOutlined } from "@ant-design/icons";
+import { CaretRightOutlined, PauseOutlined } from "@ant-design/icons";
 import "../styles/components/timeline.scss";
 
 const chartSettings = {
@@ -13,7 +13,13 @@ const chartSettings = {
   marginLeft: 50,
 };
 
-export default function Timeline({ data, activeTime, setActiveTime }) {
+export default function Timeline({
+  data,
+  activeTime,
+  setActiveTime,
+  setIsPlaying,
+  isPlaying,
+}) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
 
@@ -69,7 +75,9 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
         .attr("fill", "transparent")
         .on("mouseover", mouseOver)
         .on("mouseout", mouseOut)
-        .on("click", mouseClick);
+        .on("click", mouseClick)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
 
       const text = bounds
         .selectAll(".date-text")
@@ -103,6 +111,9 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
         })
         .attr("stroke-width", 2);
 
+      // create a tooltip
+      var Tooltip = d3.select(".tooltip").style("opacity", 0);
+
       function mouseOver(event, d) {
         event.stopPropagation();
         lines
@@ -118,6 +129,7 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
               ? "#F38181"
               : "#8785A2"
           );
+        Tooltip.style("opacity", 1).style("z-index", 3);
       }
 
       function mouseOut(event, d) {
@@ -133,6 +145,15 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
       function mouseClick(event, d) {
         event.stopPropagation();
         setActiveTime(d);
+      }
+
+      function mousemove(event, d) {
+        Tooltip.html(d)
+          .style("left", event.clientX + "px")
+          .style("top", event.clientY - 70 + "px");
+      }
+      function mouseleave(d) {
+        Tooltip.style("opacity", 0).style("z-index", 1);
       }
 
       // 5. Draw data
@@ -157,7 +178,19 @@ export default function Timeline({ data, activeTime, setActiveTime }) {
     <div className="timeline" ref={ref}>
       <svg width={dms.width} height={dms.height} ref={refSvg}></svg>
       <div className="play-btn">
-        <CaretRightOutlined />
+        {isPlaying ? (
+          <PauseOutlined
+            onClick={() => {
+              setIsPlaying(false);
+            }}
+          />
+        ) : (
+          <CaretRightOutlined
+            onClick={() => {
+              setIsPlaying(true);
+            }}
+          />
+        )}
       </div>
     </div>
   );
