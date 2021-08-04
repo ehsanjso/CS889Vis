@@ -54,47 +54,47 @@ const data = [
   },
   {
     key: "6",
-    name: "Unknown",
+    name: "Top Degen 1",
     address: "0x57757e3d981446d585af0d9ae4d7df6d64647806",
   },
   {
     key: "7",
-    name: "Unknown",
+    name: "Top Degen 2",
     address: "0x46499275b5c4d67dfa46b92d89aada3158ea392e",
   },
   {
     key: "8",
-    name: "Unknown",
+    name: "Top Degen 3",
     address: "0x57ef012861c4937a76b5d6061be800199a2b9100",
   },
   {
     key: "9",
-    name: "Unknown",
+    name: "Top Degen 4",
     address: "0x6cfac3cf77a359d7ce28c14f2d53de48981e0f04",
   },
   {
     key: "10",
-    name: "Unknown",
+    name: "Top Degen 5",
     address: "0xf486d56cce70c481b3455af901fcc4f03fee8107",
   },
   {
     key: "11",
-    name: "Unknown",
+    name: "Top Degen 6",
     address: "0xc31db2e710192791b65de43d4b84886a6d770322",
   },
   {
     key: "12",
-    name: "Unknown",
+    name: "Top Degen 7",
     address: "0x554b1bd47b7d180844175ca4635880da8a3c70b9",
   },
   {
     key: "13",
-    name: "Unknown",
+    name: "Top Degen 8",
     address: "0x951b6d50d07c39b0f97a7bb2f5c1e96f07a093d3",
   },
   {
     key: "14",
-    name: "Unknown",
+    name: "Top Degen 9",
     address: "0x71f9ccd68bf1f5f9b571f509e0765a04ca4ffad2",
   },
 ];
