@@ -4,4 +4,4 @@
 export const host =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
     ? "//localhost:4000"
-    : "//localhost:4000";
+    : process.env.REACT_APP_BACKEND;
