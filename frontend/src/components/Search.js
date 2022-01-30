@@ -19,7 +19,7 @@ export default function Search({ match }) {
       address: address,
     };
     try {
-      const result = await axios.post(`${host}/activity/address`, body);
+      await axios.post(`${host}/activity/address`, body);
       setAddress(undefined);
       history.push(`/search/${address}`);
     } catch (error) {

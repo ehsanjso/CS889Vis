@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { host } from "../actions/consts/host";
 import * as d3 from "d3";
-import * as R from "ramda";
-import { history } from "../routers/AppRouter";
 import Loading from "./Loading";
 import "../styles/components/portfolio.scss";
 
@@ -156,6 +154,7 @@ export default function Portfolio({ address }) {
         .text((d) => format(d.asset));
     }
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };

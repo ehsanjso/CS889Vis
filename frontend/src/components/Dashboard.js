@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { ResizeObserver } from "@juggle/resize-observer";
 import { host } from "../actions/consts/host";
@@ -11,7 +11,6 @@ import "../styles/components/dashboard.scss";
 import InfoBox from "./InfoBox";
 import Header from "./Header";
 import Loading from "./Loading";
-import { active } from "d3";
 
 const chartSettings = {
   marginTop: 250,
@@ -253,9 +252,11 @@ export default function Dashboard() {
       }
     }
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dms.boundedHeight,
     dms.boundedWidth,

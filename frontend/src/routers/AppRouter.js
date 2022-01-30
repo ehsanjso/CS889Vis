@@ -7,7 +7,6 @@ import { createBrowserHistory } from "history";
 import Spiral from "../components/Spiral";
 import Dashboard from "../components/Dashboard";
 import Search from "../components/Search";
-import Portfolio from "../components/Portfolio";
 
 export const history = createBrowserHistory();
 

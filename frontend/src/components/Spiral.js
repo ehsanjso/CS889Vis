@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { ResizeObserver } from "@juggle/resize-observer";
 import { host } from "../actions/consts/host";
 import * as d3 from "d3";
@@ -99,7 +98,7 @@ export default function Spiral({ match }) {
         firstDayOfYear = firstDayOfYear.add(1, "days");
       }
 
-      const chart = new TimeSpiral(bounds)
+      new TimeSpiral(bounds)
         .size([dms.boundedWidth, dms.boundedHeight])
         .layers(3)
         .style({
@@ -112,6 +111,7 @@ export default function Spiral({ match }) {
         .render();
     }
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };

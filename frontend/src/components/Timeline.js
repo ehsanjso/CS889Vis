@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ResizeObserver } from "@juggle/resize-observer";
 import moment from "moment";
 import * as d3 from "d3";
@@ -63,7 +63,7 @@ export default function Timeline({
         .attr("stroke", (d) => (d === activeTime ? "#F38181" : "#8785A2"))
         .attr("stroke-width", 2);
 
-      const bins = bounds
+      bounds
         .selectAll(".date-bins")
         .data(dateRange)
         .enter()
@@ -80,7 +80,7 @@ export default function Timeline({
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
 
-      const text = bounds
+      bounds
         .selectAll(".date-text")
         .data(dateRange)
         .enter()
@@ -96,7 +96,7 @@ export default function Timeline({
         .attr("text-anchor", "middle")
         .attr("fill", "#393E46");
 
-      const dateTicks = bounds
+      bounds
         .selectAll(".date-tick")
         .data(dateRange)
         .enter()
@@ -112,7 +112,7 @@ export default function Timeline({
         })
         .attr("stroke-width", 2);
 
-      const activeDate = bounds
+      bounds
         .selectAll(".date-active")
         .data([activeTime])
         .enter()
@@ -178,9 +178,11 @@ export default function Timeline({
       // // 7. Draw Scene Breaks
     }
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dms.boundedHeight,
     dms.boundedWidth,
